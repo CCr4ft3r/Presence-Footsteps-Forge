@@ -62,11 +62,11 @@ public final class AssociationPool {
      * @param pos           The block position being queried.
      * @param state         The block state found at the queried position.
      * @param substrate     The substrate corresponding to the stage of lookup being performed. One of the values in {@link Substrates}
-     * @return The matching acoustic names or {@link Emitter#UNASSIGNED} if no match could be determined.
+     * @return The matching acoustic names or {@link SoundsKey#UNASSIGNED} if no match could be determined.
      */
     public SoundsKey get(BlockPos pos, BlockState state, String substrate) {
         for (Entity golem : entity.level().getEntities(entity, new AABB(pos).inflate(0.5, 0, 0.5), e -> {
-            return !e.canBeCollidedWith() || e.getBoundingBox().maxY < entity.getY() + 0.2F;
+            return !e.canBeCollidedWith(null) || e.getBoundingBox().maxY < entity.getY() + 0.2F;
         })) {
             if ((association = engine.getIsolator().golems().getAssociation(golem.getType(), substrate)).isEmitter()) {
                 return association;

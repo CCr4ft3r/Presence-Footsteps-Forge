@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -33,7 +34,7 @@ public interface BlockReport {
             }
         }, Util.ioPool()).thenAcceptAsync(loc -> {
             hud.addMessage(Component.translatable("pf.report.save", Component.literal(loc.getFileName().toString()).withStyle(s -> s
-                    .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, loc.toString()))
+                    .withClickEvent(new ClickEvent.OpenFile(loc.toString()))
                     .applyFormat(ChatFormatting.UNDERLINE)))
                 .withStyle(s -> s
                     .withColor(ChatFormatting.GREEN)));

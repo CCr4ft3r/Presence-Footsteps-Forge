@@ -1,7 +1,9 @@
 package eu.ha3.presencefootsteps.sound.generator;
 
 import eu.ha3.presencefootsteps.mixins.EntityAttachementsAccessor;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.EntityAttachment;
+import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,7 +23,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorItem;
 
 import java.util.List;
 
@@ -78,7 +79,7 @@ class TerrestrialStepSoundGenerator implements StepSoundGenerator {
         simulateAirborne();
         simulateBrushes();
         simulateStationary();
-        lastFallDistance = entity.fallDistance;
+        lastFallDistance = (float) entity.fallDistance;
     }
 
     protected void simulateStationary() {
@@ -334,8 +335,8 @@ class TerrestrialStepSoundGenerator implements StepSoundGenerator {
 
     protected void playStep(Association association, State eventType) {
         if (engine.getConfig().getEnabledFootwear()) {
-            if (entity.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof ArmorItem bootItem) {
-                SoundsKey bootSound = engine.getIsolator().primitives().getAssociation(bootItem.getEquipSound().value(), Substrates.DEFAULT);
+            if (entity.getItemBySlot(EquipmentSlot.FEET).get(DataComponents.EQUIPPABLE) instanceof Equippable bootItem) {
+                SoundsKey bootSound = engine.getIsolator().primitives().getAssociation(bootItem.equipSound().value(), Substrates.DEFAULT);
                 if (bootSound.isEmitter()) {
                     engine.getIsolator().acoustics().playStep(association, eventType, Options.singular("volume_percentage", 0.5F));
                     engine.getIsolator().acoustics().playAcoustic(entity, bootSound, eventType, Options.EMPTY);

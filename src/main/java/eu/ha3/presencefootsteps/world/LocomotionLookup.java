@@ -11,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -54,7 +55,7 @@ public class LocomotionLookup implements Index<Entity, Locomotion> {
         writer.each(BuiltInRegistries.ENTITY_TYPE, type -> {
             ResourceLocation id = EntityType.getKey(type);
             if (full || !contains(id)) {
-                if (type.create(Minecraft.getInstance().level) instanceof LivingEntity) {
+                if (type.create(Minecraft.getInstance().level, EntitySpawnReason.TRIGGERED) instanceof LivingEntity) {
                     writer.field(id.toString(), values.getOrDefault(id, Locomotion.NONE).name());
                 }
             }

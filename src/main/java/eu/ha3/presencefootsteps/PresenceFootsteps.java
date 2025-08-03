@@ -47,6 +47,6 @@ public class PresenceFootsteps {
 
     public void showSystemToast(Component title, Component body) {
         Minecraft client = Minecraft.getInstance();
-        client.getToasts().addToast(SystemToast.multiline(client, SystemToast.SystemToastId.PACK_LOAD_FAILURE, title, body));
+        client.getToastManager().addToast(SystemToast.multiline(client, SystemToast.SystemToastId.PACK_LOAD_FAILURE, title, body));
     }
 }

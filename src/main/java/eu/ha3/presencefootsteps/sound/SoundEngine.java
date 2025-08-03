@@ -10,6 +10,8 @@ import java.util.concurrent.Executor;
 import java.util.stream.Stream;
 
 import net.minecraft.server.packs.resources.PreparableReloadListener;
+import net.minecraft.util.profiling.Profiler;
+import net.minecraft.world.entity.animal.FlyingAnimal;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,9 +30,7 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.FlyingMob;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.decoration.ArmorStand;
@@ -116,7 +116,7 @@ public class SoundEngine implements PreparableReloadListener {
         final List<? extends Entity> entities = cameraEntity.level().getEntities((Entity) null, cameraEntity.getBoundingBox().inflate(16), e -> {
             return e instanceof LivingEntity
                     && !(e instanceof WaterAnimal)
-                    && !(e instanceof FlyingMob)
+                    && !(e instanceof FlyingAnimal)
                     && !(e instanceof Shulker
                             || e instanceof ArmorStand
                             || e instanceof Boat
@@ -186,14 +186,14 @@ public class SoundEngine implements PreparableReloadListener {
         }
 
         return event.unwrap().right().filter(sound -> {
-            if (event == SoundEvents.PLAYER_SWIM
-                || event == SoundEvents.PLAYER_SPLASH
-                || event == SoundEvents.PLAYER_BIG_FALL
-                || event == SoundEvents.PLAYER_SMALL_FALL) {
+            if (event.value() == SoundEvents.PLAYER_SWIM
+                || event.value() == SoundEvents.PLAYER_SPLASH
+                || event.value() == SoundEvents.PLAYER_BIG_FALL
+                || event.value() == SoundEvents.PLAYER_SMALL_FALL) {
                 return true;
             }
 
-            String[] name = sound.getLocation().getPath().split("\\.");
+            String[] name = sound.location().getPath().split("\\.");
             return name.length > 0
                     && "block".contentEquals(name[0])
                     && "step".contentEquals(name[name.length - 1]);
@@ -202,14 +202,13 @@ public class SoundEngine implements PreparableReloadListener {
 
     @Override
     public @NotNull CompletableFuture<Void> reload(PreparationBarrier sync, ResourceManager sender,
-                                                   ProfilerFiller serverProfiler, ProfilerFiller clientProfiler,
                                                    Executor serverExecutor, Executor clientExecutor) {
         return sync.wait(null).thenRunAsync(() -> {
-            clientProfiler.startTick();
-            clientProfiler.push("Reloading PF Sounds");
+            Profiler.get().startTick();
+            Profiler.get().push("Reloading PF Sounds");
             reloadEverything(sender);
-            clientProfiler.pop();
-            clientProfiler.endTick();
+            Profiler.get().pop();
+            Profiler.get().endTick();
         }, clientExecutor);
     }
 
@@ -222,4 +221,5 @@ public class SoundEngine implements PreparableReloadListener {
         isolator = new Isolator(this);
         hasConfigurations = false;
     }
+
 }

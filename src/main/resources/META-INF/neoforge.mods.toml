@@ -4,7 +4,7 @@ license="MIT"
 issueTrackerURL = "https://github.com/PaintNinja/Presence-Footsteps-Forge"
 [[mods]] #mandatory
 modId="presencefootsteps" #mandatory
-version="1.21.1-1.12.0-beta.1" #mandatory
+version="1.21.7-1.12.0-beta.1" #mandatory
 displayName = "Presence Footsteps (Forge)"
 displayURL = "https://www.curseforge.com/minecraft/mc-mods/presence-footsteps-forge"
 updateJSONURL = "https://forge.curseupdate.com/433068/presencefootsteps"
